@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<title>社員情報登録</title>
+
+<link th:rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-datepicker.css}" />
+<link th:rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-datepicker.standalone.css}" />
+<link rel="stylesheet" th:href="@{/resources/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/resources/css/font-awesome.min.css}" />
+
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/popper.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap-datepicker.js}"></script>
+<!-- Form Validation jQuery-->
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
+<script>
+     $(function() {
+        $("#datepicker").datepicker({ 
+            dateFormat : "yyyy-mm-dd"
+        }); 
+     });
+ </script>
+  
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+</head>
+<body>
+<div th:replace="site/header :: header"></div>
+<div class="container mt-4">
+	<div class="row justify-content-center align-items-center">
+		<div class="card w-75">
+			<div class="card-body formData">
+				<h3 class="row justify-content-center align-items-center card-title align-items-center">
+					社員登録
+				</h3><br>
+				<form th:action="@{/register}" th:object="${signUpObj}" id="employeeRegister" method="post">					
+					
+					<div class="row  form-group">
+						<label class="col-sm-2 control-label" for="name"> 社員名 : </label>
+						 <input type="text" class="col-sm-10 form-control" id="name"  name="name"
+						 oninvalid="InvalidName(this);" oninput="InvalidName(this);" 
+						 th:field="*{name}" required/>
+					</div>
+					<div class="row  form-group">
+						<label class="col-sm-2 control-label" for="mail"> メール </label> 
+						<input type="email" class="col-sm-10 form-control" id="mail" name="mail"
+							oninvalid="InvalidMail(this);"  oninput="InvalidMail(this);" th:field="*{mail}" required/>
+					</div>
+					<div class="row form-group">
+						<label class="col-sm-2 control-label" for="raw_password"> パスワード </label> 
+						<input type="text" class="col-sm-10 form-control" id="raw_password" name="raw_password"
+							oninvalid="InvalidPassword(this);"  oninput="InvalidPassword(this);" th:field="*{raw_password}" required/>
+					</div>
+					<div class="row form-group">
+						<label class="col-sm-2 control-label" for="phoneNo"> 電話番号 :  </label>
+						 <input type="text" class="col-sm-10 form-control" id="phoneNo"  name="phoneNo"
+						 	oninvalid="InvalidPhoneNo(this);" oninput="InvalidPhoneNo(this);" th:field="*{phoneNo}" required/>
+					</div>
+					<div class="row form-group">
+					<div id=”msg”></div>
+						<label class="col-sm-2 control-label" for="groupNo"> グループ : </label> 
+						<select class="form-select col-sm-10 form-control selectpicker" name="groupNo" id="groupNo" 
+							oninvalid="InvalidGroupNo(this);"  oninput="InvalidGroupNo(this);"
+						th:field="*{groupNo}" required>
+							<option value=""> -------------------------------------------- グループを選択してください -------------------------------------------- </option>
+							<option th:each="groupNo : ${T(com.demo.attendance.entity.EmployeeInfo.Group).values()}"
+								th:value="${groupNo}" th:text="${groupNo}"></option>
+						</select>
+					</div>
+					<div class="row form-group">
+					<div id=”msg1”></div>
+						<label class="col-sm-2 control-label" for="position"> 位置 : </label> 
+						<select class="form-select required col-sm-10 form-control selectpicker" name="position" id="position" 							
+							oninvalid="InvalidPosition(this);"  oninput="InvalidPosition(this);"
+						th:field="*{position}" required>
+							<option value=""> -------------------------------------------- 位置を選択してください -------------------------------------------- </option>
+							<option th:each="position : ${T(com.demo.attendance.entity.EmployeeInfo.Position).values()}"
+								th:value="${position}" th:text="${position}"></option>
+						</select>
+					</div>					
+					<div class="row form-group">
+						<label class="col-sm-2 control-label" for="hireDate"> 入社日 :</label>
+						<input type="date" class="col-sm-10 form-control datepicker"  name="hireDate" id="hireDate" 
+						oninvalid="InvalidHireDate(this);"  oninput="InvalidHireDate(this);"  pattern="yyyy-mm-dd"  th:field="*{hireDate}" required/>
+					</div>
+					<div class="row form-group">
+						<label class="col-sm-2 control-label" for="address">住所 : </label>
+						<textarea class="col-sm-10 form-control" rows="5" id="address" name="address"  
+							oninvalid="InvalidAdress(this);"  oninput="InvalidAdress(this);" th:field="*{address}" required></textarea>
+					</div>
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input"
+							th:id="${#ids.seq('adminCheck')}" th:field="*{adminCheck}"
+							value="off" /> <label class="form-check-label"
+							th:for="${#ids.prev('adminCheck')}">ROLE_ADMIN</label>
+					</div><br>			
+					<div class="col-sm-10 ml-5" align="right">
+					<button class="col-sm-3 btn btn-default bg-info ml-5"  id="btnSubmit">
+					 &nbsp;&nbsp;&nbsp; 登録 &nbsp;&nbsp;&nbsp; 
+				   </button>
+					<a class="col-sm-6  pull-right btn btn-link" th:href="@{/}">社員一覧画面へ</a>
+				</div>
+				</form>
+			</div>
+		</div>
+		</div>
+	</div>	
+	<!-- Form Validation -->
+	<script type="text/javascript">
+	
+		$("#employeeRegister").validate({
+			
+			messages : {
+				
+				name : {
+					required: "お名前は必要になります。",
+				},
+				
+				mail  : {
+					required: "メールアドレスは必要になります。",
+				},
+				
+				raw_password : {
+					required: "暗証番号は必要になります。",
+				},
+				
+				phoneNo : {
+					required: "電話番号は必要になります。",
+				},
+				
+				groupNo : {
+					required:"グループは必要になります。",
+				},
+				
+				position : {
+					required:"位置は必要になります。",
+				},
+				
+				hireDate : {
+					required: "入社日は必要になります。",
+				},
+				
+				address : {
+					required: "住所は必要になります。",
+				}				
+			}			
+		});
+		
+	</script>
+</body>
+</html>

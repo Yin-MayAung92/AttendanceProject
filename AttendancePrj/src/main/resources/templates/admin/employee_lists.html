@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>社員一覧</title>
+<link th:rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-datepicker.css}" />
+<link th:rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-datepicker.standalone.css}" />
+<link rel="stylesheet" th:href="@{/resources/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/resources/css/font-awesome.min.css}" />
+
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/popper.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<!-- TABLE CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+<link
+	href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css'>
+<script
+	src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js'></script>
+<link
+	href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+<!-- Load an icon library -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<style type="text/css">
+th {
+	width: fit-content;
+	block-size: fit-content;
+	width: max-content;
+	block-size: fit-content;
+	white-space: nowrap;
+}
+
+td {
+	width: max-content;
+	block-size: fit-content;
+	white-space: nowrap;
+}
+
+/* Pagination Style */
+.pageDiv {
+	width: max-content;
+	block-size: fit-content;
+	white-space: nowrap;
+	width: fit-content;
+}
+
+.col-sm {
+	width: max-content;
+	block-size: fit-content;
+	white-space: nowrap;
+	width: fit-content;
+}
+</style>
+
+</head>
+<body>
+	<div th:replace="site/header :: header"></div>
+	<div class="container w-100 my-2">
+		<div class="row pt-3">
+			<div class="col">
+				<a th:href="@{/register-form}" class="btn btn-dark btn-md ml-auto"> &nbsp;&nbsp;&nbsp; 社員登録 &nbsp;&nbsp;&nbsp;
+				</a>
+			</div><br>
+		</div>
+		<div class="table-responsive pt-3">
+		<table class="table table-striped table-bordered" style="width: 100%">
+			<thead>
+				<tr>
+					<th data-align="center">No </th>
+					<th data-align="center">名前 </th>
+					<th data-align="center">メール </th>
+					<th data-align="center">電話番号</th>
+					<th data-align="center">グループ</th>
+					<th data-align="center">位置 </th>
+					<th data-align="center" class="d-none">ユーザーロール </th>
+					<th data-align="center">入社日 </th>
+					<th data-align="center">住所 </th>
+					<th data-align="center">修正</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="employeeInfo,iterator : ${listEmployee}">
+					<td data-align="center"
+						th:text="${iterator.count + (page.size * (page.number-1))}"></td>
+					<td data-align="center" th:text="${employeeInfo.name}"></td>
+					<td data-align="center" th:text="${employeeInfo.mail}"></td>
+					<!-- <td data-align="center" th:text="${employeeInfo.password}"></td> -->
+					<td data-align="center" th:text="${employeeInfo.phoneNo}"></td>
+					<td data-align="center" th:text="${employeeInfo.groupNo}"></td>
+					<td data-align="center" th:text="${employeeInfo.position}"></td>
+					<td data-align="center" th:text="${employeeInfo.role}" class="d-none"></td>
+					<td data-align="center"
+						th:text="${#dates.format(employeeInfo.hireDate,'yyyy-mm-dd')}"></td>
+					<td data-align="center" th:text="${employeeInfo.address}"></td>
+					<td data-align="center"><a class="btn btn-secondary btn-xs"
+						th:href="@{/update-form/{employeeId}(employeeId=${employeeInfo.employeeId})}">編集</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>	
+		<!-- Paganitation -->
+		<div class="pageDiv" th:if="${totalPages > 1}" align="left">
+			<div class="row pt-2">
+				<div class="col-sm">Total Rows: [[${totalItems}]]</div>
+				<div class="col-sm">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}"> <a
+						class="border border-info p-2" th:if="${currentPage != i}"
+						th:href="@{'/attendPaginated/' + ${i}}"> &nbsp; [[${i}]]
+							&nbsp; </a> <span th:unless="${currentPage != i}">[[${i}]]</span>
+						&nbsp; &nbsp;
+					</span>
+				</div>
+				<div class="col-sm">
+					<a class="border border-info p-2 pageChild"
+						th:if="${currentPage < totalPages}"
+						th:href="@{'/attendPaginated/' + ${currentPage + 1}}"> &nbsp;
+						Next &nbsp; </a> <span th:unless="${currentPage < totalPages}">Next</span>
+				</div>
+				<div class="col-sm">
+					<a class="border border-info p-2"
+						th:if="${currentPage < totalPages}"
+						th:href="@{'/attendPaginated/' + ${totalPages}}"> &nbsp; Last
+						&nbsp; </a> <span th:unless="${currentPage < totalPages}">Last</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

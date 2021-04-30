@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div class="container">
+		<div class="row justify-content-center align-items-center">
+			<div class="card">
+				<div class="card-body">
+					<form th:action="@{/updateShounin}" th:object="${attendanceObj}" method="post">
+						<input type="hidden" th:field="*{attendanceId}" />
+						<div class="row  form-group">
+							<label class="col-sm-3 control-label" for="groupNo"> グループ : </label>
+							 <input type="text" readonly class="col-sm-9 form-control"
+								id="groupNo" th:field="*{employeeInfo.groupNo}" />
+						</div>
+						<div class="row  form-group">
+							<label class="col-sm-3 control-label" for="name"> 名前 : </label>
+							 <input
+								type="text" readonly class="col-sm-9 form-control" id="name"
+								th:field="*{employeeInfo.name}" />
+						</div>
+						<div class="row  form-group">
+							<label class="col-sm-3 control-label" for="attendanceDate"> 日付 : </label>
+						 <input type="text" readonly id="attendanceDate"
+								class="col-sm-9 form-control" th:field="*{attendanceDate}" />
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-3 control-label" for="type"> 種類 : </label> 
+							<input
+								type="text" readonly class="col-sm-9 form-control" id="type"
+								th:field="*{attendanceType}" />
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-3 control-label" for="confirm"> 承認 : </label> 
+							<input type="text" readonly
+								class="col-sm-9 form-control text-danger" id="confirm"
+								th:field="*{confirm}" />
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-3 control-label" for="onSiteContact"> 現場連絡 : </label>
+							 <input type="text" readonly
+								class="col-sm-9 form-control" id="onSiteContact"
+								th:field="*{onSiteContact}" />
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-3 control-label" for="reason"> 理由 : </label>
+							<textarea class="col-sm-9 form-control" rows="3" readonly
+								th:field="*{reason}"></textarea>
+						</div>
+						<div class="col-sm-10 ml-5" align="right">
+							<button class="col-sm-4 btn btn-default bg-danger text-white" type="submit" name="action" value="hinin">
+								&nbsp;&nbsp;否認&nbsp;&nbsp;</button>								
+							<button class="col-sm-4 btn btn-default bg-dark text-white" type="submit" name="action" value="shounin">
+								&nbsp;&nbsp;承認 &nbsp;&nbsp;</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

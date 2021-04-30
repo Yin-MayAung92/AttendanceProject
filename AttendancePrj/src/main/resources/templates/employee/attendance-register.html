@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<title>勤怠連絡登録画面</title>
+
+<link th:rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-datepicker.css}" />
+<link th:rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-datepicker.standalone.css}" />
+<link rel="stylesheet" th:href="@{/resources/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/resources/css/font-awesome.min.css}" />
+
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/popper.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap-datepicker.js}"></script>
+<!-- Form Validation jQuery-->
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
+<!-- Latest compiled and minified Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script>
+	$(function() {
+		$("#datepicker").datepicker({
+			dateFormat : "yyyy-mm-dd"
+		});
+	});
+</script>
+
+<style>
+
+	.error {
+		color: red;
+	}
+	
+</style>
+
+</head>
+<body>
+	<div th:replace="site/header :: header"></div>
+	<div class="container mt-4">
+		<div class="row justify-content-center align-items-center">
+			<div class="card w-75">
+				<div class="card-body">
+					<h3
+						class="row justify-content-center align-items-center card-title align-items-center">
+						勤怠連絡</h3>
+					<br>
+					<form th:action="@{/saveAttendanceContactInfo}"	th:object="${attendanceContactInfo}"
+					 id="attendanceRegister" method="POST">
+						<input type="hidden" th:field="*{employeeInfo}" />
+						<div class=" row form-group">
+							<label for="attendanceType" class="col-sm-2 control-label">　勤怠連絡 : </label>
+							 <select
+							 	class="form-select col-sm-10 form-control selectpicker"
+								id="attendanceType" name="attendanceType"
+								oninvalid="InvalidAttendanceType(this);"
+								oninput="InvalidAttendanceType(this);"
+								th:field="*{attendanceType}" required>
+								<option value="">　-------------------　 勤怠連絡を選択してください　　-------------------　</option>
+								<option
+									th:each="attendanceType : ${T(com.demo.attendance.entity.AttendanceContactInfo.AType).values()}"
+									th:value="${attendanceType}" th:text="${attendanceType}"></option>
+							</select>
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-2 control-label" for="attendanceDate">　日付: </label>
+							 <input type="date" class="col-sm-10 form-control datepicker" id="attendanceDate" name="attendanceDate"	
+							  oninvalid="InvalidDate(this);"
+								oninput="InvalidDate(this);"
+							  pattern="yyyy-mm-dd"
+							  th:field="*{attendanceDate}" required />
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-2 control-label" for="type"> 種類 : </label> 
+							<select
+								class="form-select col-sm-10 form-control selectpicker"
+								id="type" name="type" 
+								oninvalid="InvalidType(this);"
+								oninput="InvalidType(this);"
+								 th:field="*{type}" required>
+								<option value="">　-------------------　 種類を選択してください　　-------------------　</option>
+								<option
+									th:each="type : ${T(com.demo.attendance.entity..AttendanceContactInfo.Type).values()}"
+									th:value="${type}" th:text="${type}"></option>
+							</select>
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-2 control-label" for="onSiteContact">　現場連絡 : </label> 
+							<select
+								class="form-select col-sm-10 form-control selectpicker"
+								id="onSiteContact" name="onSiteContact"
+								oninvalid="InvalidOnSiteContact(this);"
+								oninput="InvalidOnSiteContact(this);"
+								th:field="*{onSiteContact}" required>
+								<option value="">　-------------------　 現場連絡を選択してください　　-------------------　</option>
+								<option
+									th:each="onSiteContact : ${T(com.demo.attendance.entity..AttendanceContactInfo.Contact).values()}"
+									th:value="${onSiteContact}" th:text="${onSiteContact}"></option>
+							</select>
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-2 control-label　sr-only" for="confirm">　承認 : </label>
+						 <select
+								class="form-select col-sm-10 form-control selectpicker"
+								id="confirm" name="confirm" 
+								oninvalid="InvalidConfirm(this);"
+								oninput="InvalidConfirm(this);"
+								 th:field="*{confirm}" required>
+								<option value="">　-------------------　 承認データを選択してください　　-------------------　</option>
+								<option
+									th:each="confirm : ${T(com.demo.attendance.entity..AttendanceContactInfo.Confirm).values()}"
+									th:value="${confirm}" th:text="${confirm}"></option>
+							</select>
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-2 control-label" for="reason"> 理由 :　</label>
+							<textarea class="col-sm-10 form-control" rows="5" id="reason" name="reason"
+								oninvalid="InvalidReason(this);"
+								oninput="InvalidReason(this);"
+								 th:field="*{reason}" required>
+							</textarea>
+						</div>
+						<div class="col-sm-10 ml-5" align="right">
+							<button class="col-sm-3 btn btn-default bg-info ml-5"
+								type="submit" onclick="Validate()">&nbsp;&nbsp;&nbsp;
+								登録 &nbsp;&nbsp;&nbsp;</button>
+							<a class="col-sm-6  pull-right btn btn-link"
+								th:href="@{/employeeHome}">勤怠連絡一覧画面へ</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Form Validation -->
+	<script type="text/javascript">
+	
+		$("#attendanceRegister").validate({
+			
+			messages : {
+				
+				attendanceType : {
+					required: "勤怠連絡は必要になります。",
+				},
+				
+				attendanceDate  : {
+					required: "日付は必要になります。",
+				},
+				
+				type : {
+					required: "種類は必要になります。",
+				},
+				
+				onSiteContact : {
+					required: "現場連絡は必要になります。",
+				},
+				
+				confirm : {
+					required:"承知データは必要になります。",
+				},
+				
+				reason : {
+					required:"理由は必要になります。",
+				}			
+			}			
+		});
+		
+	</script>
+</body>
+</html>

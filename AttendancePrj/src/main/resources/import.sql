@@ -1,0 +1,1 @@
+insert into employeeinfo(name,mail, password, raw_password,group_no, position, role, hire_date, phone_no, address) values('admin', 'admin@starse.com', '$2a$10$VGr0IVBsOVbJtKUW/RWrE.4tMPjIlKdVcm308v8mEfsqDICfJbL8u', 'admin', 'グループ1', 0, 'Role_Admin','2017-01-15 00:04:00', '08078490183', 'Ikebukuro Tokyo');
